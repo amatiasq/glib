@@ -1,23 +1,21 @@
 define(function(require) {
 
 	var Base = require('core/base');
-	var Loader = require('tools/loader');
+	var mainLoader = require('tools/loader').instance;
 
-	var Entity = Base.extend({
+	return Base.extend({
 
 		get tile() {
 			return this._tile.src;
 		},
 		set tile(value) {
-			this._tile = Loader.cache[value];
-			if (!this._tile)
-				throw new Error('Asset --[' + value + ']-- is not loaded yet');
+			this._tile = mainLoader.addImage(value);
 		},
 
 		init: function() {
-			this.canvas = null;
-			this._tile = new Image();
 			this.pos = { x: 0, y: 0 };
+			this.canvas = null;
+			this._tile = null;
 		},
 
 		draw: function() {
@@ -27,7 +25,5 @@ define(function(require) {
 		}
 
 	});
-
-	return Entity;
 
 });

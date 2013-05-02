@@ -2,7 +2,7 @@ define(function(require) {
 
 	var extend = require('core/extend');
 
-	var Base = extend(Object, {
+	return extend(Object, {
 
 		constructor: function() {
 			if (this.$factory) {
@@ -15,7 +15,5 @@ define(function(require) {
 
 		init: function() { }
 	});
-
-	return Base;
 
 });

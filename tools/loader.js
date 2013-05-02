@@ -12,46 +12,58 @@ define(function(require) {
 		},
 
 		addImage: function(url) {
+			if (Loader.cache[url])
+				return Loader.cache[url];
+
+			var el = new Image();
+			el.src = url;
+			Loader.cache[url] = el;
+			this.images.push(el);
 			this.loaded = false;
-			this.images.push(url);
+
+			this.run();
+			return el;
 		},
 
-		start: function() {
-			var loaded = this.images.map(toFalse);
-			var elements = this.images.map(function(url) {
-				var el = new Image();
-				el.src = url;
-				Loader.cache[url] = el;
-				return el;
-			});
-
-			function end() {
+		run: function() {
+			var end = function() {
 				console.log('end');
 				this.loaded = true;
 				this._callbacks.forEach(function(a) { a() });
-			}
+				this._callbacks = [];
+			}.bind(this);
 
-			end = end.bind(this);
-
-			elements.forEach(function(element, index) {
+			var loaded = [];
+			this.images.filter(function(element) {
+				return !element.complete;
+			}).forEach(function(element, index) {
+				loaded[index] = false;
 				element.onload = function() {
 					console.log('received');
 					loaded[index] = true;
-					if (loaded.every(Boolean))
-						end();
+					if (loaded.every(Boolean)) end();
 				};
 			});
+
+			if (!loaded.length)
+				end();
 		},
 
 		onLoad: function(listener) {
 			if (typeof listener === 'function')
 				this._callbacks.push(listener);
 		}
-	});
 
-	Loader.cache = {};
+	}, {
 
-	Object.defineProperty(Loader, 'instance', function() {
+		cache: {},
+
+		get instance() {
+			if (!this._instance)
+				this._instance = new this();
+
+			return this._instance;
+		}
 
 	});
 

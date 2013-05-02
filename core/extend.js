@@ -85,6 +85,8 @@
 	 * @param config <JSON> The object with methdos to inject.
 	 */
 	function inject(target, props) {
+		if (!props) return;
+
 		_.each(props, function(prop) {
 			var desc = _.getOwn(props, prop);
 			var base = _.get(target, prop);
@@ -97,7 +99,6 @@
 	}
 
 	function copy(target, source) {
-		if (!source) return;
 		_.each(source, function(prop) {
 			_.set(target, prop, _.getOwn(source, prop));
 		})
@@ -123,8 +124,15 @@
 				function() { Parent.apply(this, arguments); };
 
 		// Add basic static methods
-		ctor.extend = function(desc) { return extend(this, desc) };
-		ctor.inject = function(desc) { return inject(this.prototype, desc) };
+		ctor.extend = function(desc, statics) {
+			return extend(this, desc, statics)
+		};
+		ctor.inject = function(desc, statics) {
+			inject(this.prototype, desc);
+			inject(this, statics);
+			return this;
+		};
+
 		// Copy parent's statics
 		copy(ctor, Parent);
 		inject(ctor, statics)

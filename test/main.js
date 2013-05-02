@@ -1,21 +1,19 @@
 define('main', function(require) {
 
-	var Loader = require('tools/loader');
+	var loader = require('tools/loader').instance;
 	var Entity = require('game/entity');
 
-	var loader = new Loader();
-	loader.addImage('cross.png');
-	loader.start();
+	var player = new Entity();
+	player.canvas = $('canvas')[0];
+	player.pos.x = 100;
+	player.tile = 'cross.png'
 
 	console.log('sending');
 	loader.onLoad(function() {
 		console.log('received');
-		var player = new Entity();
-		player.canvas = $('canvas')[0];
-		player.pos.x = 100;
-		player.tile = 'cross.png'
 		player.draw();
 	});
+
 });
 
 

@@ -11,10 +11,15 @@ define('main', function(require) {
 
 	var game = new Game(canvas);
 	var player = game.spawn(Entity, 100, 0);
+	player.friction.y = 0.1;
 	player.accel.y = 0.05;
 	player.tile = 'cross.png'
 
 	game.start();
+
+	setTimeout(function() {
+		player.accel.y = 0;
+	}, 2000);
 });
 
 

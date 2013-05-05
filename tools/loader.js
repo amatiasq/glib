@@ -27,7 +27,6 @@ define(function(require) {
 
 		run: function() {
 			var end = function() {
-				console.log('end');
 				this.loaded = true;
 				this._callbacks.forEach(function(a) { a() });
 				this._callbacks = [];
@@ -50,7 +49,12 @@ define(function(require) {
 		},
 
 		onLoad: function(listener) {
-			if (typeof listener === 'function')
+			if (typeof listener !== 'function')
+				return;
+
+			if (this.loaded)
+				setTimeout(listener, 0);
+			else
 				this._callbacks.push(listener);
 		}
 

@@ -10,7 +10,7 @@ define(function(require) {
 				if (value) return value;
 			}
 
-			this.init();
+			this.init.apply(this, arguments);
 		},
 
 		init: function() { }

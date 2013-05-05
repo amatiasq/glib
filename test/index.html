@@ -23,6 +23,13 @@
 
 		<script type="text/javascript" src="../lib/underscore.js"></script>
 		<script type="text/javascript" src="../lib/jquery-2.0.0.js"></script>
-		<script type="text/javascript" src="../lib/require.js" data-main="main"></script>
+		<script type="text/javascript" src="../lib/require.js"></script>
+
+		<script type="text/javascript">
+			requirejs.config({
+				baseUrl: '../',
+				urlArgs: "nocache=" +  Date.now(),
+			})(['test/main'])
+		</script>
 	</body>
 </html>

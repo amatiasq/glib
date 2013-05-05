@@ -4,6 +4,7 @@ define(function(require) {
 	var Vector = require('core/vector');
 	var mainLoader = require('tools/loader').instance;
 
+	var count = 0;
 	return Base.extend({
 
 		_tile: null,
@@ -18,6 +19,7 @@ define(function(require) {
 		},
 
 		init: function() {
+			this.__id__ = count++;
 			this.maxVel = new Vector(100, 100);
 			this.friction = new Vector(0, 0);
 			this.accel = new Vector(0, 0);
@@ -33,9 +35,9 @@ define(function(require) {
 			if (!this.accel.isZero)
 				this.vel.merge(this.accel);
 			else
-				this.vel.sustract(this.friction);
+				this.vel.toZero(this.friction);
 
-			this.vel.max(this.maxVel).min(Vector.zero);
+			this.vel.max(this.maxVel).min(this.maxVel.negate());
 			return this.pos.clone().merge(this.vel);
 		},
 
@@ -45,7 +47,15 @@ define(function(require) {
 		},
 
 		step: function() {
+			//this.debug();
 			this.updateLocation(this._nextPos());
+		},
+
+		debug: function() {
+			console.log('Entity --[' + this.__id__ +
+				'{ pos: ' + this.pos.round() +
+				', vel: ' + this.vel.round() +
+				', accel: ' + this.accel.round() + ' }');
 		}
 	});
 });

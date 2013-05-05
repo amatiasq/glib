@@ -1,4 +1,4 @@
-define('main', function(require) {
+define(function(require) {
 
 	var loader = require('tools/loader').instance;
 	var Game = require('game/game');
@@ -20,10 +20,5 @@ define('main', function(require) {
 	setTimeout(function() {
 		player.accel.y = 0;
 	}, 2000);
+	window.player = player;
 });
-
-
-requirejs.config({
-	baseUrl: '../',
-	urlArgs: "nocache=" +  Date.now(),
-})(['main'])

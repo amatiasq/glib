@@ -111,6 +111,10 @@ define(function(require) {
 			return new Vector(this.x - vector.x, this.y - vector.y);
 		},
 
+		negate: function() {
+			return new Vector(-this.x, -this.y);
+		},
+
 		max: function(vector) {
 			if (this.x > vector.x)
 				this.x = vector.x;
@@ -129,6 +133,26 @@ define(function(require) {
 				this.y = vector.y;
 
 			return this;
+		},
+
+		toZero: function(vector) {
+			if (this.x !== 0) {
+				if (Math.abs(this.x) < Math.abs(vector.x))
+					this.x = 0;
+				else if (this.x > 0)
+					this.x -= vector.x
+				else if (this.x < 0)
+					this.x += vector.x
+			}
+
+			if (this.y !== 0) {
+				if (Math.abs(this.y) < Math.abs(vector.y))
+					this.y = 0;
+				else if (this.y > 0)
+					this.y -= vector.y
+				else if (this.y < 0)
+					this.y += vector.y
+			}
 		},
 
 
@@ -171,7 +195,7 @@ define(function(require) {
 		},
 
 		toString: function() {
-			return "[object Vector] { x: " + this.x + ", y: " + this.y + " }";
+			return "V{x:" + this.x + ",y:" + this.y + "}";
 		}
 	});
 

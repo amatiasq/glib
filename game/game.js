@@ -59,6 +59,7 @@ define(function(require) {
 			if (this.running)
 				requestAnimFrame(this._run);
 
+			this.canvas.width = this.canvas.width;
 			this.step();
 		}
 

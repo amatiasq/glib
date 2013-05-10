@@ -1,7 +1,8 @@
 define(function(require) {
 
 	var Base = require('core/base');
-	var Image = require('asset/image');
+	var Input = require('tools/input');
+	var Sprite = require('asset/sprite');
 	var mainLoader = require('tools/loader').instance;
 
 	var requestAnimFrame =
@@ -10,12 +11,12 @@ define(function(require) {
 		window.mozRequestAnimationFrame    ||
 		function(callback) { window.setTimeout(callback, 1000 / 60) };
 
-	var i = 0;
-
 	var Game = Base.extend({
 
 		init: function(canvas) {
 			this.running = false;
+			this.input = new Input();
+			window.input = this.input;
 			this.entities = [];
 			this.maps = [];
 			this.canvas = canvas;
@@ -25,7 +26,7 @@ define(function(require) {
 
 		spawn: function(Constructor, x, y) {
 			this._needSort = true;
-			var entity = new Constructor();
+			var entity = new Constructor(this.input);
 			entity.pos.x = x;
 			entity.pos.y = y;
 			this.entities.push(entity);

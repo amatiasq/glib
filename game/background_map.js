@@ -1,7 +1,7 @@
 define(function(require) {
 
 	var Vector = require('core/vector');
-	var Image = require('asset/image');
+	var Sprite = require('asset/sprite');
 	var Map = require('game/map');
 
 	return Map.extend({
@@ -10,7 +10,10 @@ define(function(require) {
 			return this._tiles;
 		},
 		set tiles(value) {
-			this._tiles = new Image(value);
+			if (typeof value === 'string')
+				value = new Sprite(value, this.tilesize);
+
+			this._tiles = value;
 		},
 
 		init: function(tilesize, data, tileset) {
@@ -40,15 +43,7 @@ define(function(require) {
 
 			for (var i = rowStart; i < rowEnd; i++)
 				for (var j = colStart; j < colEnd; j++)
-					this._tiles.drawTile(
-						// basic draw data
-						context, scale,
-						// tile position
-						j * tilesize, i * tilesize,
-						// tile index
-						this.data[i][j],
-						// tile size
-						tilesize, 1);
+					this._tiles.draw(context, scale, j * tilesize, i * tilesize, this.data[i][j]);
 		}
 	});
 });

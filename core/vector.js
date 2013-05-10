@@ -44,6 +44,7 @@ define(function(require) {
 		set: function(x, y) {
 			this.x = x;
 			this.y = y;
+			return this;
 		},
 
 		equals: function(target) {
@@ -76,18 +77,6 @@ define(function(require) {
 			return this;
 		},
 
-		add: function(vector) {
-			this.x += vector.x;
-			this.y += vector.y;
-			return this;
-		},
-
-		sustract: function() {
-			this.x -= vector.x;
-			this.y -= vector.y;
-			return this;
-		},
-
 		add: function(val) {
 			this.x += val;
 			this.y += val;
@@ -117,7 +106,9 @@ define(function(require) {
 		},
 
 		negate: function() {
-			return new Vector(-this.x, -this.y);
+			this.x = -this.x;
+			this.y = -this.y;
+			return this;
 		},
 
 		max: function(vector) {

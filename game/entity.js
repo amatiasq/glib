@@ -18,8 +18,9 @@ define(function(require) {
 			this._tile = mainLoader.addImage(value);
 		},
 
-		init: function() {
+		init: function(input) {
 			this.__id__ = count++;
+			this.input = input;
 			this.maxVel = new Vector(100, 100);
 			this.friction = new Vector(0, 0);
 			this.accel = new Vector(0, 0);
@@ -37,7 +38,10 @@ define(function(require) {
 			else
 				this.vel.toZero(this.friction);
 
-			this.vel.max(this.maxVel).min(this.maxVel.negate());
+			this.maxVel.negate();
+			this.vel.min(this.maxVel);
+			this.maxVel.negate();
+			this.vel.max(this.maxVel);
 			return this.pos.clone().merge(this.vel);
 		},
 

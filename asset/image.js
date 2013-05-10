@@ -1,82 +1,63 @@
 define(function(require) {
 
 	var Base = require('core/base');
+	var mainLoader = require('tools/loader').instance;
 
-	var ImageHandler = Base.extend({
+	var Image = Base.extend({
 
 		get loaded() {
 			return this.data.complete;
 		},
 		get width() {
-			return this.data.width;
+			return this._width || this.data.width;
 		},
 		get height() {
-			return this.data.height;
+			return this._height || this.data.height;
 		},
 
 		init: function(source) {
 			this.path = source;
-			this.data = new Image();
-			this.data.src = source;
+			if (!source) debugger;
+			this.data = mainLoader.addImage(source);
 		},
 
 		crop: function(x, y, width, height) {
-			return new Cropped(this.data, x, y, width, height);
-		},
-
-		tile: function(tile, tilesize, offset) {
-			offset = offset || 0;
-			var square = tilesize + offset;
-			var tilesPerRow = Math.floor(this.width / square);
-			var row = Math.floor(tile / tilesPerRow);
-			var col = tile % tilesPerRow;
-			return this.crop(col * square + offset, row * square + offset, tilesize, tilesize);
+			width = width || this.width - x;
+			height = height || this.height - y;
+			return new Cropped(this.path, x, y, width, height);
 		},
 
 		draw: function(context, scale, x, y) {
+			if (!this.loaded)
+				throw new Error('Image ' + this.path + ' is not loaded yet');
+
 			context.drawImage(this.data, x, y, this.width * scale, this.height * scale);
-		},
-
-		drawTile: function(context, scale, x, y, tile, tilesize, offset) {
-			this.tile(tile, tilesize, offset).draw(context, scale, x, y);
-
-			// var tilesPerRow = Math.floor(this.width / tilesize);
-			// var row = Math.floor(tile / tilesPerRow);
-			// var col = tile % tilesPerRow;
-			// var finalSize = tilesize * scale;
-
-			// context.drawImage(
-			// 	this.data,
-			// 	// tile source position
-			// 	col * tilesize, row * tilesize,
-			// 	// tile source size
-			// 	tilesize, tilesize
-			// 	// target location
-			// 	x, y,
-			// 	// target tile size
-			// 	finalSize, finalSize);
 		}
 	});
 
-	var Cropped = ImageHandler.extend({
+	var Cropped = Image.extend({
 
-		init: function(data, x, y, width, height) {
-			this.data = data;
+		init: function(source, x, y, width, height) {
+			this.base(source);
 			this.cropX = x;
 			this.cropY = y;
-			this.cropWidth = width;
-			this.cropHeight = height;
+			this._width = width;
+			this._height = height;
+		},
+
+		crop: function(x, y, width, height) {
+			return new Cropped(this.path, this.cropX + x, this.cropY + y, width, height);
 		},
 
 		draw: function(context, scale, x, y) {
 			context.drawImage(
 				this.data,
 				this.cropX, this.cropY,
-				this.cropWidth, this.cropHeight,
+				this.width, this.height,
 				x, y,
-				this.cropWidth * scale, this.cropHeight * scale);
+				this.width * scale, this.height * scale);
 		}
 	});
 
-	return ImageHandler;
+	return Image;
 });

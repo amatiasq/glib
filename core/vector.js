@@ -41,6 +41,11 @@ define(function(require) {
 			this.y = y || 0;
 		},
 
+		set: function(x, y) {
+			this.x = x;
+			this.y = y;
+		},
+
 		equals: function(target) {
 			return this.x === target.x && this.y === target.y;
 		},

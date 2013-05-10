@@ -1,6 +1,7 @@
 define(function(require) {
 
 	var Base = require('core/base');
+	var Image = require('asset/image');
 	var mainLoader = require('tools/loader').instance;
 
 	var requestAnimFrame =
@@ -9,11 +10,14 @@ define(function(require) {
 		window.mozRequestAnimationFrame    ||
 		function(callback) { window.setTimeout(callback, 1000 / 60) };
 
+	var i = 0;
+
 	var Game = Base.extend({
 
 		init: function(canvas) {
 			this.running = false;
 			this.entities = [];
+			this.maps = [];
 			this.canvas = canvas;
 			this._needSort = false;
 			this._run = this._run.bind(this);
@@ -26,6 +30,10 @@ define(function(require) {
 			entity.pos.y = y;
 			this.entities.push(entity);
 			return entity;
+		},
+
+		addMap: function(map) {
+			this.maps.push(map);
 		},
 
 		start: function() {
@@ -42,6 +50,7 @@ define(function(require) {
 		},
 
 		step: function() {
+			var scale = 1;
 			var ctx = this.canvas.getContext('2d');
 
 			if (this._needSort) {
@@ -49,9 +58,13 @@ define(function(require) {
 				this._needSort = false;
 			}
 
+			this.maps.forEach(function(map) {
+				map.draw(ctx, scale, 0, 0)
+			});
+
 			this.entities.forEach(function(entity) {
 				entity.step();
-				entity.draw(ctx);
+				entity.draw(ctx, scale);
 			});
 		},
 

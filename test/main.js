@@ -3,6 +3,12 @@ define(function(require) {
 	var loader = require('tools/loader').instance;
 	var Game = require('game/game');
 	var Entity = require('game/entity');
+	var Background = require('game/background_map');
+
+	var map = new Background(16, [
+		[  70,  71 ],
+		[ 370, 371 ],
+	], 'terrain.png');
 
 	var viewport = $(window);
 	var canvas = $('canvas')[0];
@@ -15,6 +21,7 @@ define(function(require) {
 	player.accel.y = 0.05;
 	player.tile = 'cross.png'
 
+	game.addMap(map);
 	game.start();
 
 	setTimeout(function() {

@@ -75,16 +75,18 @@ define(function(require) {
 		crop: function(x, y, width, height) {
 			return new SpriteCropped(this.path, this.tilesize.x, this.tilesize.y,
 				this.gap.x, this.gap.y, this.cropX + x, this.cropY + y, width, height);
+		},
+
+		draw: function(context, scale, x, y, tile) {
+			if (this._width == null)
+				this._width = this.data.width - this.cropX;
+			if (this._height == null)
+				this._height = this.data.height - this.cropY;
+
+			this.draw = this.base;
+			this.base(context, scale, x, y, tile);
 		}
 	});
 
 	return Sprite;
 });
-
-
-cols * x + gap * (x - 1) = width;
-cols * x + gap * x - gap = width;
-
-10 * 5 + 2 * (5 - 1) = 58
-10 * 5 + 2 * 5 - 2 = 58
-10 * 5 + 2 * 5 - 2 = 58

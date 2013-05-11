@@ -13,11 +13,11 @@ define(function(require) {
 		},
 
 		step: function() {
-			var keyVelocity = 10;
-			if (this.input.get('up'))    this.pos.y -= keyVelocity;
-			if (this.input.get('down'))  this.pos.y += keyVelocity;
-			if (this.input.get('left'))  this.pos.x -= keyVelocity;
-			if (this.input.get('right')) this.pos.x += keyVelocity;
+			var keyVelocity = 1;
+			if (this.input.get('up'))    this.vel.y -= keyVelocity;
+			if (this.input.get('down'))  this.vel.y += keyVelocity;
+			if (this.input.get('left'))  this.vel.x -= keyVelocity;
+			if (this.input.get('right')) this.vel.x += keyVelocity;
 			this.base();
 		}
 	});

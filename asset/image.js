@@ -9,21 +9,18 @@ define(function(require) {
 			return this.data.complete;
 		},
 		get width() {
-			return this._width || this.data.width;
+			return '_width' in this ? this._width : this.data.width;
 		},
 		get height() {
-			return this._height || this.data.height;
+			return '_height' in this ? this._height : this.data.height;
 		},
 
 		init: function(source) {
 			this.path = source;
-			if (!source) debugger;
 			this.data = mainLoader.addImage(source);
 		},
 
 		crop: function(x, y, width, height) {
-			width = width || this.width - x;
-			height = height || this.height - y;
 			return new Cropped(this.path, x, y, width, height);
 		},
 
@@ -50,6 +47,14 @@ define(function(require) {
 		},
 
 		draw: function(context, scale, x, y) {
+
+			// KNOWN BUG: If no width or height are passed they will be undefined until .draw() is invoked
+
+			if (this._width == null)
+				this._width = this.data.width - this.cropX;
+			if (this._height == null)
+				this._height = this.data.height - this.cropY;
+
 			context.drawImage(
 				this.data,
 				this.cropX, this.cropY,

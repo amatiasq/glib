@@ -73,8 +73,15 @@ define(function(require) {
 			if (this.running)
 				requestAnimFrame(this._run);
 
+			var now = Date.now();
+			var frameDiff = now - this._lastFrame;
+			this.fps = 1000 / frameDiff
+			this._lastFrame = now;
+
 			this.canvas.width = this.canvas.width;
 			this.step();
+
+			if (this.a) this.a();
 		}
 
 	});

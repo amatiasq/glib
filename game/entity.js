@@ -7,20 +7,21 @@ define(function(require) {
 	var count = 0;
 	return Base.extend({
 
-		_tile: null,
-		canvas: null,
-		bounciness: 0,
-
 		get tile() {
-			return this._tile.src;
+			return this._tile;
 		},
 		set tile(value) {
-			this._tile = mainLoader.addImage(value);
+			if (typeof value === 'string')
+				value = new Image(value);
+
+			this._tile = value;
 		},
 
 		init: function(input) {
 			this.__id__ = count++;
+			this._tile = null;
 			this.input = input;
+			//this.bounciness = 0;
 			this.maxVel = new Vector(100, 100);
 			this.friction = new Vector(0, 0);
 			this.accel = new Vector(0, 0);
@@ -28,8 +29,8 @@ define(function(require) {
 			this.pos = new Vector(0, 0);
 		},
 
-		draw: function(ctx) {
-			ctx.drawImage(this._tile, this.pos.x, this.pos.y);
+		draw: function(context, scale) {
+			this._tile.draw(context, scale, this.pos.x, this.pos.y);
 		},
 
 		_nextPos: function() {
@@ -51,7 +52,6 @@ define(function(require) {
 		},
 
 		step: function() {
-			//this.debug();
 			this.updateLocation(this._nextPos());
 		},
 

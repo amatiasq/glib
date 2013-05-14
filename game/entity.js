@@ -2,6 +2,7 @@ define(function(require) {
 
 	var Base = require('core/base');
 	var Vector = require('core/vector');
+	var Animation = require('asset/animation');
 	var mainLoader = require('tools/loader').instance;
 
 	var count = 0;
@@ -17,11 +18,25 @@ define(function(require) {
 			this._tile = value;
 		},
 
+		get animation() {
+			return this._animation;
+		},
+		set animation(value) {
+			if (typeof value === 'string')
+				value = this.animations[value];
+
+			this._animation = value;
+		},
+
 		init: function(input) {
 			this.__id__ = count++;
 			this._tile = null;
+			this._animation = null;
+
 			this.input = input;
+			this.animations = {};
 			//this.bounciness = 0;
+
 			this.maxVel = new Vector(100, 100);
 			this.friction = new Vector(0, 0);
 			this.accel = new Vector(0, 0);
@@ -29,8 +44,8 @@ define(function(require) {
 			this.pos = new Vector(0, 0);
 		},
 
-		draw: function(context, scale) {
-			this._tile.draw(context, scale, this.pos.x, this.pos.y);
+		addAnimation: function(id, animation, interval) {
+			this.animations[id] = new Animation(this.tile, animation, interval);
 		},
 
 		_nextPos: function() {
@@ -53,6 +68,11 @@ define(function(require) {
 
 		step: function() {
 			this.updateLocation(this._nextPos());
+			this.animation.step();
+		},
+
+		draw: function(context, scale) {
+			this.animation.draw(context, scale, this.pos.x, this.pos.y);
 		},
 
 		debug: function() {

@@ -11,10 +11,10 @@ define(function(require) {
 	for (var i = 0; i < 22; i++) {
 		a[i] = [];
 		for (var j = 0; j < 60; j++)
-			a[i][j] = i * 60 + j + 1;
+			a[i][j] = 130//i * 60 + j + 1;
 	}
 
-	a[1][1] = 71;
+	//a[1][1] = 71;
 
 	// [
 	// 	[  71, 190, 190,  72 ],
@@ -39,13 +39,21 @@ define(function(require) {
 
 	player.friction.set(0.1, 0.1);
 	player.accel.y = 0.05;
-	player.tile = new Image('hero.png').crop(8, 24, 47, 95)
+	player.tile = new Sprite('hero.png', 16, 32).crop(8, 24, 48, 96)
+	player.addAnimation('stop-down', [ 2 ], 1);
+	player.addAnimation('stop-up',   [ 5 ], 1);
+	player.addAnimation('stop-left', [ 8 ], 1);
+	player.addAnimation('stop-right', [ -8 ], 1);
+	player.addAnimation('walk-down', [ 1, 2, 3 ], 0.2)
+	player.addAnimation('walk-up',   [ 4, 5, 6 ], 0.2)
+	player.addAnimation('walk-left', [ 7, 8, 9 ], 0.2)
+	player.addAnimation('walk-right', [ -7, -8, -9 ], 0.2)
 
 	game.addMap(map);
 	game.start();
 
-	setTimeout(function() { player.accel.y = 0 }, 2000);
-	setInterval(function() { fps.innerHTML = Math.round(game.fps) }, 300);
+	setTimeout(function() { player.accel.y = 0 }, 1000);
+	setInterval(function() { fps.innerHTML = Math.round(game.fps) + 'fps' }, 300);
 
 	window.game = game;
 	window.player = player;

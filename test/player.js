@@ -6,6 +6,7 @@ define(function(require) {
 
 		init: function(input) {
 			this.base(input);
+			this.direction = 'down';
 			input.bind(input.KEY.UP, 'up');
 			input.bind(input.KEY.DOWN, 'down');
 			input.bind(input.KEY.LEFT, 'left');
@@ -14,10 +15,29 @@ define(function(require) {
 
 		step: function() {
 			var keyVelocity = 1;
-			if (this.input.get('up'))    this.vel.y -= keyVelocity;
-			if (this.input.get('down'))  this.vel.y += keyVelocity;
-			if (this.input.get('left'))  this.vel.x -= keyVelocity;
-			if (this.input.get('right')) this.vel.x += keyVelocity;
+			this.animation = 'stop-' + this.direction;
+
+			if (this.input.get('up')) {
+				this.pos.y -= keyVelocity;
+				this.direction = 'up';
+				this.animation = 'walk-up';
+
+			} else if (this.input.get('down')) {
+				this.pos.y += keyVelocity;
+				this.direction = 'down';
+				this.animation = 'walk-down';
+
+			} else if (this.input.get('left')) {
+				this.pos.x -= keyVelocity;
+				this.direction = 'left';
+				this.animation = 'walk-left';
+
+			} else if (this.input.get('right')) {
+				this.pos.x += keyVelocity;
+				this.direction = 'right';
+				this.animation = 'walk-right';
+			}
+
 			this.base();
 		}
 	});

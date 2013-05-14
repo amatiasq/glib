@@ -10,7 +10,6 @@ define(function(require) {
 	function key(code) {
 		return function(signals, el, signal) {
 			el.addEventListener('keydown', function(event) {
-				console.log(event.which);
 				if (event.which === code) signals[signal] = true;
 			}, true);
 			el.addEventListener('keyup', function(event) {

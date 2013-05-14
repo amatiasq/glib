@@ -5,86 +5,55 @@ define(function(require) {
 
 	// var Sprite = CocaCola.extend({ transparent: true });
 
-	var tmp = new Vector();
+	var helperVector = new Vector();
 
 	var Sprite = Image.extend({
 
 		init: function(source, tileWidth, tileHeight, gapX, gapY) {
 			this.base(source);
-			this.tilesize = new Vector(tileWidth, tileHeight || tileWidth);
-			this.gap = new Vector(gapX || 0, gapY || gapX || 0)
+			this._tileCache = {};
+			this.tilesize = new Vector(tileWidth, tileHeight);
+			this.gap = new Vector(gapX || 0, gapY || gapX || 0);
 			this.square = this.tilesize.clone().merge(this.gap);
 		},
 
-		_tileCoords: function(tile) {
-			if (!tile)
-				throw new Error('Invalid tile index "0"');
-			if (!this.loaded)
-				throw new Error('Image ' + this.path + ' is not loaded yet');
+		crop: function(x, y, width, height) {
+			return this._cropInto(
+				new Sprite(this.path, this.tilesize.x, this.tilesize.y, this.gap.x, this.gap.y),
+				x, y, width, height);
+		},
 
+		_createTile: function(tile) {
+			var coords = this._tileCoords(Math.abs(tile));
+			return new Image(this.path).crop(this._x + coords.x, this._y + coords.y, this.tilesize.x, this.tilesize.y);
+		},
+
+		_tileCoords: function(tile) {
+			if (!this.loaded) throw new Error('Image ' + this.path + ' is not loaded yet');
+
+			this._calcSize();
 			if (!this.tilesPerRow)
 				this.tilesPerRow = Math.floor((this.width + this.gap.x) / this.square.x);
 
 			tile--;
 			var row = Math.floor(tile / this.tilesPerRow);
-			var col = tile % this.tilesPerRow// - row;
-			return tmp.set(col * this.square.x, row * this.square.y);
-		},
-
-		crop: function(x, y, width, height) {
-			return new SpriteCropped(this.path, this.tilesize.x, this.tilesize.y,
-				this.gap.x, this.gap.y, x, y, width, height);
-		},
-
-		tile: function(tile) {
-			var coords = this._tileCoords(tile);
-			return this.crop(coords.x, coords.y, this.tilesize.x, this.tilesize.y);
+			var col = tile % this.tilesPerRow;
+			return helperVector.set(col * this.square.x, row * this.square.y);
 		},
 
 		draw: function(context, scale, x, y, tile) {
-			var coords = this._tileCoords(tile);
-			context.drawImage(
-				this.data,
-				// tile source position
-				coords.x, coords.y,
-				// tile source size
-				this.tilesize.x, this.tilesize.y,
-				// target location
-				x, y,
-				// target tile size
-				this.tilesize.x * scale, this.tilesize.y * scale);
-		}
-	});
+			if (!tile) {
+				console.warn('Printing whole sprite');
+				return this.base(context, scale, x, y);
+			}
 
-	var SpriteCropped = Sprite.extend({
-		init: function(source, tileWidth, tileHeight, gapX, gapY, x, y, width, height) {
-			this.base(source, tileWidth, tileHeight, gapX, gapY);
-			this.cropX = x;
-			this.cropY = y;
-			this._width = width;
-			this._height = height;
-		},
+			if (!this._tileCache[tile]) {
+				var img = this._createTile(tile);
+				if (tile < 0) img.flipX();
+				this._tileCache[tile] = img;
+			}
 
-		_tileCoords: function(tile) {
-			var coords = this.base(tile);
-			coords.x += this.cropX;
-			coords.y += this.cropY;
-			return coords;
-		},
-
-		crop: function(x, y, width, height) {
-			return new SpriteCropped(this.path, this.tilesize.x, this.tilesize.y,
-				this.gap.x, this.gap.y, this.cropX + x, this.cropY + y, width, height);
-		},
-
-		draw: function(context, scale, x, y, tile) {
-			if (this._width == null)
-				this._width = this.data.width - this.cropX;
-			if (this._height == null)
-				this._height = this.data.height - this.cropY;
-
-			this.draw = this.base;
-			this.base(context, scale, x, y, tile);
+			this._tileCache[tile].draw(context, scale, x, y);
 		}
 	});
 

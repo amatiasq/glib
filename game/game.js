@@ -11,9 +11,12 @@ define(function(require) {
 		window.mozRequestAnimationFrame    ||
 		function(callback) { window.setTimeout(callback, 1000 / 60) };
 
+	//requestAnimFrame = function(callback) { window.setTimeout(callback, 1000 / 3) };
+
 	var Game = Base.extend({
 
 		init: function(canvas) {
+			this.iteration = 0;
 			this.running = false;
 			this.input = new Input();
 			window.input = this.input;
@@ -53,6 +56,12 @@ define(function(require) {
 		step: function() {
 			var scale = 1;
 			var ctx = this.canvas.getContext('2d');
+			this.iteration++;
+
+			if (this.iteration === 1)
+				console.profile();
+			if (this.iteration === 600)
+				console.profileEnd();
 
 			if (this._needSort) {
 				this.entities = this.entities;//.sort(function())

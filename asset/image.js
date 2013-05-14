@@ -9,58 +9,68 @@ define(function(require) {
 			return this.data.complete;
 		},
 		get width() {
-			return '_width' in this ? this._width : this.data.width;
+			return this._crop ? this._width : this.data.width;
 		},
 		get height() {
-			return '_height' in this ? this._height : this.data.height;
+			return this._crop ? this._height : this.data.height;
 		},
 
 		init: function(source) {
 			this.path = source;
 			this.data = mainLoader.addImage(source);
+
+			this._flipX = false;
+			this._flipY = false;
+			this._crop = false;
+
+			this._x = 0;
+			this._y = 0;
+			this._width = null;
+			this._height = null;
+		},
+
+		flipX: function() {
+			this._flipX = !this._flipX;
+			return this;
+		},
+		flipY: function() {
+			this._flipY = !this._flipY;
+			return this;
 		},
 
 		crop: function(x, y, width, height) {
-			return new Cropped(this.path, x, y, width, height);
+			return this._cropInto(new Image(this.path), x, y, width, height);
+		},
+
+		_cropInto: function(child, x, y, width, height) {
+			child._crop = true;
+			child._x = this._x + x || 0;
+			child._y = this._y + y || 0;
+			child._width = width || null;
+			child._height = height || null;
+			return child;
+		},
+
+		_calcSize: function() {
+			if (this._crop) {
+				if (!this._width)  this._width  = this.data.width -  this._x;
+				if (!this._height) this._height = this.data.height - this._y;
+			}
 		},
 
 		draw: function(context, scale, x, y) {
-			if (!this.loaded)
-				throw new Error('Image ' + this.path + ' is not loaded yet');
+			this._calcSize();
 
-			context.drawImage(this.data, x, y, this.width * scale, this.height * scale);
-		}
-	});
+			context.save();
+			context.translate(this._flipX ? x + this.width : x, this._flipY ? this.height + y : y);
+			context.scale(this._flipX ? -scale : scale, this._flipY ? -scale : scale);
 
-	var Cropped = Image.extend({
+			if (!this._crop)
+				context.drawImage(this.data, 0, 0, this.width, this.height);
+			else
+				context.drawImage(this.data, this._x, this._y, this._width, this._height, 0, 0, this.width, this.height);
 
-		init: function(source, x, y, width, height) {
-			this.base(source);
-			this.cropX = x;
-			this.cropY = y;
-			this._width = width;
-			this._height = height;
-		},
-
-		crop: function(x, y, width, height) {
-			return new Cropped(this.path, this.cropX + x, this.cropY + y, width, height);
-		},
-
-		draw: function(context, scale, x, y) {
-
-			// KNOWN BUG: If no width or height are passed they will be undefined until .draw() is invoked
-
-			if (this._width == null)
-				this._width = this.data.width - this.cropX;
-			if (this._height == null)
-				this._height = this.data.height - this.cropY;
-
-			context.drawImage(
-				this.data,
-				this.cropX, this.cropY,
-				this.width, this.height,
-				x, y,
-				this.width * scale, this.height * scale);
+			context.restore();
 		}
 	});
 

@@ -71,8 +71,11 @@ define(function(require) {
 			this.animation.step();
 		},
 
-		draw: function(context, scale) {
-			this.animation.draw(context, scale, this.pos.x, this.pos.y);
+		draw: function(context) {
+			context.save();
+			context.translate(this.pos.x, this.pos.y);
+			this.animation.draw(context);
+			context.restore();
 		},
 
 		debug: function() {

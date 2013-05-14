@@ -28,24 +28,32 @@ define(function(require) {
 			this.scroll.set(x, y);
 		},
 
-		draw: function(context, scale) {
+		draw: function(context) {
 			var tilesize = this.tilesize;
-			var areaX = context.canvas.width / scale;
-			var areaY = context.canvas.height / scale;
-
 			var rowStart = Math.floor(this.scroll.y / tilesize);
-			var rowEnd = Math.ceil((this.scroll.y + areaY) / tilesize);
+			var rowEnd = Math.ceil((this.scroll.y + context.canvas.height) / tilesize);
 			var colStart = Math.floor(this.scroll.x / tilesize);
-			var colEnd = Math.ceil((this.scroll.x + areaX) / tilesize);
+			var colEnd = Math.ceil((this.scroll.x + context.canvas.width) / tilesize);
 
 			if (rowStart < 0) rowStart = 0;
 			if (rowEnd > this.height) rowEnd = this.height;
 			if (colStart < 0) colStart = 0;
 			if (colEnd > this.width) colEnd = this.width;
 
-			for (var i = rowStart; i < rowEnd; i++)
-				for (var j = colStart; j < colEnd; j++)
-					this._tiles.draw(context, scale, j * tilesize, i * tilesize, this.data[i][j]);
+			context.save();
+
+			var i, j;
+			var rowWidth = (colEnd - colStart) * tilesize;
+
+			for (i = rowStart; i < rowEnd; i++) {
+				for (j = colStart; j < colEnd; j++) {
+					this._tiles.draw(context, this.data[i][j]);
+					context.translate(tilesize, 0);
+				}
+				context.translate(-rowWidth, tilesize);
+			}
+
+			context.restore();
 		}
 	});
 });

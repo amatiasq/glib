@@ -41,10 +41,10 @@ define(function(require) {
 			return helperVector.set(col * this.square.x, row * this.square.y);
 		},
 
-		draw: function(context, scale, x, y, tile) {
+		draw: function(context, tile) {
 			if (!tile) {
 				console.warn('Printing whole sprite');
-				return this.base(context, scale, x, y);
+				return this.base(context);
 			}
 
 			if (!this._tileCache[tile]) {
@@ -53,7 +53,7 @@ define(function(require) {
 				this._tileCache[tile] = img;
 			}
 
-			this._tileCache[tile].draw(context, scale, x, y);
+			this._tileCache[tile].draw(context);
 		}
 	});
 

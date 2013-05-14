@@ -26,8 +26,8 @@ define(function(require) {
 			}
 		},
 
-		draw: function(context, scale, x, y) {
-			this.sprite.draw(context, scale, x, y, this.sequence[this._current]);
+		draw: function(context) {
+			this.sprite.draw(context, this.sequence[this._current]);
 		}
 	});
 });

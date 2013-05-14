@@ -54,7 +54,6 @@ define(function(require) {
 		},
 
 		step: function() {
-			var scale = 1;
 			var ctx = this.canvas.getContext('2d');
 			this.iteration++;
 
@@ -69,12 +68,12 @@ define(function(require) {
 			}
 
 			this.maps.forEach(function(map) {
-				map.draw(ctx, scale, 0, 0)
+				map.draw(ctx)
 			});
 
 			this.entities.forEach(function(entity) {
 				entity.step();
-				entity.draw(ctx, scale);
+				entity.draw(ctx);
 			});
 		},
 

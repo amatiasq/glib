@@ -58,12 +58,12 @@ define(function(require) {
 			}
 		},
 
-		draw: function(context, scale, x, y) {
+		draw: function(context) {
 			this._calcSize();
 
 			context.save();
-			context.translate(this._flipX ? x + this.width : x, this._flipY ? this.height + y : y);
-			context.scale(this._flipX ? -scale : scale, this._flipY ? -scale : scale);
+			context.translate(this._flipX ? this.width : 0, this._flipY ? this.height : 0);
+			context.scale(this._flipX ? -1 : 1, this._flipY ? -1 : 1);
 
 			if (!this._crop)
 				context.drawImage(this.data, 0, 0, this.width, this.height);

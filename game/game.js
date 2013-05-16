@@ -67,6 +67,8 @@ define(function(require) {
 				this._needSort = false;
 			}
 
+			ctx.scale(2, 2);
+
 			this.maps.forEach(function(map) {
 				map.draw(ctx)
 			});

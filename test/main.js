@@ -40,14 +40,14 @@ define(function(require) {
 	player.friction.set(0.1, 0.1);
 	player.accel.y = 0.05;
 	player.tile = new Sprite('hero.png', 16, 32).crop(8, 24, 48, 96)
-	player.addAnimation('stop-down', [ 2 ], 1);
-	player.addAnimation('stop-up',   [ 5 ], 1);
-	player.addAnimation('stop-left', [ 8 ], 1);
-	player.addAnimation('stop-right', [ -8 ], 1);
-	player.addAnimation('walk-down', [ 1, 2, 3 ], 0.2)
-	player.addAnimation('walk-up',   [ 4, 5, 6 ], 0.2)
-	player.addAnimation('walk-left', [ 7, 8, 9 ], 0.2)
-	player.addAnimation('walk-right', [ -7, -8, -9 ], 0.2)
+	player.addAnimation('stop-down', 1, [ 2 ]);
+	player.addAnimation('stop-up', 1,   [ 5 ]);
+	player.addAnimation('stop-left', 1, [ 8 ]);
+	player.addAnimation('stop-right', 1, [ -8 ]);
+	player.addAnimation('walk-down', 0.1, [ 1, 2, 3 ]);
+	player.addAnimation('walk-up', 0.1,   [ 4, 5, 6 ]);
+	player.addAnimation('walk-left', 0.1, [ 7, 8, 9 ]);
+	player.addAnimation('walk-right', 0.1, [ -7, -8, -9 ]);
 
 	game.addMap(map);
 	game.start();

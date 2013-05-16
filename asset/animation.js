@@ -11,7 +11,7 @@ define(function(require) {
 			this._interval = value * 1000;
 		},
 
-		init: function(sprite, sequence, interval) {
+		init: function(sprite, interval, sequence) {
 			this.sprite = sprite;
 			this.sequence = sequence;
 			this.interval = interval;

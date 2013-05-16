@@ -44,8 +44,8 @@ define(function(require) {
 			this.pos = new Vector(0, 0);
 		},
 
-		addAnimation: function(id, animation, interval) {
-			this.animations[id] = new Animation(this.tile, animation, interval);
+		addAnimation: function(id, interval, animation) {
+			this.animations[id] = new Animation(this.tile, interval, animation);
 		},
 
 		_nextPos: function() {

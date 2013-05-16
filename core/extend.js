@@ -40,6 +40,14 @@
 			Object.defineProperty(target, prop, descriptor);
 		},
 		wrap: function wrap_ECMA5(funct, base) {
+			// HACK: Performance of the second function is NEFAST!
+			return function() {
+				var a = this.base; this.base = base.value;
+				// If you are here and don't know what to do, debug into the next line
+				var result = funct.apply(this, arguments);
+				return (this.base = a), result;
+			};
+
 			base.configurable = true;
 
 			return function() {

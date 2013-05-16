@@ -14,30 +14,29 @@ define(function(require) {
 		},
 
 		step: function() {
-			var keyVelocity = 1;
-			this.animation = 'stop-' + this.direction;
+			var keyVelocity = 2;
+			var direction;
 
-			if (this.input.get('up')) {
-				this.pos.y -= keyVelocity;
-				this.direction = 'up';
-				this.animation = 'walk-up';
+			this.vel.set(
+				this.input.get('left') ? -keyVelocity : this.input.get('right') ? keyVelocity : 0,
+				this.input.get('up') ? -keyVelocity : this.input.get('down') ? keyVelocity : 0
+			);
 
-			} else if (this.input.get('down')) {
-				this.pos.y += keyVelocity;
-				this.direction = 'down';
-				this.animation = 'walk-down';
+			if (this.input.get('up'))
+				direction = 'up';
+			else if (this.input.get('down'))
+				direction = 'down';
+			else if (this.input.get('left'))
+				direction = 'left';
+			else if (this.input.get('right'))
+				direction = 'right';
 
-			} else if (this.input.get('left')) {
-				this.pos.x -= keyVelocity;
-				this.direction = 'left';
-				this.animation = 'walk-left';
+			if (direction)
+				this.animation = 'walk-' + direction;
+			else if (this.direction)
+				this.animation = 'stop-' + this.direction;
 
-			} else if (this.input.get('right')) {
-				this.pos.x += keyVelocity;
-				this.direction = 'right';
-				this.animation = 'walk-right';
-			}
-
+			this.direction = direction;
 			this.base();
 		}
 	});

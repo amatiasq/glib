@@ -1,7 +1,7 @@
 define(function(require) {
+	'use strict';
 
 	var Base = require('core/base');
-	var toFalse = Boolean.bind(false);
 
 	var Loader = Base.extend({
 

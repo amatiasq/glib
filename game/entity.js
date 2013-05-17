@@ -1,9 +1,9 @@
 define(function(require) {
+	'use strict';
 
 	var Base = require('core/base');
 	var Vector = require('core/vector');
 	var Animation = require('asset/animation');
-	var mainLoader = require('tools/loader').instance;
 
 	var count = 0;
 	return Base.extend({
@@ -36,7 +36,7 @@ define(function(require) {
 		},
 
 		init: function(input) {
-			this.__id__ = count++;
+			this.$id = count++;
 			this._tile = null;
 			this._animation = null;
 
@@ -98,7 +98,7 @@ define(function(require) {
 		},
 
 		debug: function() {
-			console.log('Entity --[' + this.__id__ +
+			console.log('Entity --[' + this.$id +
 				'{ pos: ' + this.pos.round() +
 				', vel: ' + this.vel.round() +
 				', accel: ' + this.accel.round() + ' }');

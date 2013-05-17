@@ -1,9 +1,9 @@
 define(function(require) {
+	'use strict';
 
 	var Base = require('core/base');
 	var Vector = require('core/vector');
 	var Input = require('tools/input');
-	var Sprite = require('asset/sprite');
 	var mainLoader = require('tools/loader').instance;
 
 	var requestAnimFrame =
@@ -77,7 +77,7 @@ define(function(require) {
 			ctx.scale(2, 2);
 
 			this.maps.forEach(function(map) {
-				map.draw(ctx)
+				map.draw(ctx);
 			});
 
 
@@ -93,7 +93,7 @@ define(function(require) {
 
 			var now = Date.now();
 			var frameDiff = now - this._lastFrame;
-			this.fps = 1000 / frameDiff
+			this.fps = 1000 / frameDiff;
 			this._lastFrame = now;
 
 			this.canvas.width = this.canvas.width;

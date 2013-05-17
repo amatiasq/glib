@@ -1,15 +1,16 @@
 define(function(require) {
+	'use strict';
 
 	var Vector = require('core/vector');
 	var Map = require('game/map');
 
-	function getX(item) { return item.x };
-	function getY(item) { return item.y };
-	function dispose(item) { item.dispose() };
+	function getX(item) { return item.x }
+	function getY(item) { return item.y }
+	function dispose(item) { item.dispose() }
 
 	return Map.extend({
-		fits: function(fromX, fromY, toX, toY, width, height) {
-			this.getTile(fromX, fromY)
+		fits: function(fromX, fromY) { //, toX, toY, width, height) {
+			this.getTile(fromX, fromY);
 		},
 
 		trace: function(fromX, fromY, width, height, destX, destY) {
@@ -29,7 +30,7 @@ define(function(require) {
 				collisionY: false
 			};
 
-			for (var i = tilesStartY; i <= tileEndY; i++)
+			for (var i = tileStartY; i <= tileEndY; i++)
 				for (var j = tileStartX; j <= tileEndX; j++)
 					if (this.data[i][j])
 						tiles.push(Vector(i, j));

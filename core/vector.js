@@ -1,4 +1,7 @@
+//jshint -W040
+
 define(function(require) {
+	'use strict';
 
 	var Base = require('core/base');
 
@@ -20,8 +23,8 @@ define(function(require) {
 		return angle * Math.PI / 180;
 	}
 
-	function radiansToAngle(radian) {
-		var angle = this.radians / Math.PI * 180;
+	function radiansToAngle(radians) {
+		var angle = radians / Math.PI * 180;
 
 		while (angle < 0)
 			angle += 360;
@@ -145,18 +148,18 @@ define(function(require) {
 				if (Math.abs(this.x) < Math.abs(vector.x))
 					this.x = 0;
 				else if (this.x > 0)
-					this.x -= vector.x
+					this.x -= vector.x;
 				else if (this.x < 0)
-					this.x += vector.x
+					this.x += vector.x;
 			}
 
 			if (this.y !== 0) {
 				if (Math.abs(this.y) < Math.abs(vector.y))
 					this.y = 0;
 				else if (this.y > 0)
-					this.y -= vector.y
+					this.y -= vector.y;
 				else if (this.y < 0)
-					this.y += vector.y
+					this.y += vector.y;
 			}
 		},
 
@@ -167,7 +170,7 @@ define(function(require) {
 		get hypotenuse() {
 			if (this.isZero)
 				return 0;
-			return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2), 2)
+			return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2), 2);
 		},
 
 		get angle() {
@@ -200,7 +203,7 @@ define(function(require) {
 		},
 
 		toString: function() {
-			return "V{x:" + this.x + ",y:" + this.y + "}";
+			return 'V{x:' + this.x + ',y:' + this.y + '}';
 		}
 	});
 

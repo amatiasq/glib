@@ -1,4 +1,5 @@
 define(function(require) {
+	'use strict';
 
 	var Base = require('core/base');
 	var mainLoader = require('tools/loader').instance;
@@ -68,7 +69,8 @@ define(function(require) {
 			if (!this._crop)
 				context.drawImage(this.data, 0, 0, this.width, this.height);
 			else
-				context.drawImage(this.data, this._x, this._y, this._width, this._height, 0, 0, this.width, this.height);
+				context.drawImage(this.data, this._x, this._y, this._width, this._height,
+					0, 0, this.width, this.height);
 
 			context.restore();
 		}

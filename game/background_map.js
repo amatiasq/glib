@@ -1,10 +1,9 @@
 define(function(require) {
+	'use strict';
 
 	var Vector = require('core/vector');
 	var Sprite = require('asset/sprite');
 	var Map = require('game/map');
-
-	var count = 0;
 
 	return Map.extend({
 

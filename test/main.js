@@ -1,8 +1,7 @@
 define(function(require) {
+	'use strict';
 
-	var Image = require('asset/image');
 	var Sprite = require('asset/sprite');
-	var loader = require('tools/loader').instance;
 	var Game = require('game/game');
 	var Player = require('test/player');
 	var Background = require('game/background_map');
@@ -11,7 +10,7 @@ define(function(require) {
 	for (var i = 0; i < 22; i++) {
 		a[i] = [];
 		for (var j = 0; j < 60; j++)
-			a[i][j] = 130//i * 60 + j + 1;
+			a[i][j] = 130;//i * 60 + j + 1;
 	}
 
 	//a[1][1] = 71;
@@ -39,7 +38,7 @@ define(function(require) {
 
 	player.friction.set(0.1, 0.1);
 	player.accel.y = 0.05;
-	player.tile = new Sprite('hero.png', 16, 32).crop(8, 24, 48, 96)
+	player.tile = new Sprite('hero.png', 16, 32).crop(8, 24, 48, 96);
 	player.addAnimation('stop-down', 1, [ 2 ]);
 	player.addAnimation('stop-up', 1,   [ 5 ]);
 	player.addAnimation('stop-left', 1, [ 8 ]);

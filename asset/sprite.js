@@ -1,4 +1,5 @@
 define(function(require) {
+	'use strict';
 
 	var Vector = require('core/vector');
 	var Image = require('asset/image');

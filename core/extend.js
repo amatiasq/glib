@@ -14,12 +14,13 @@
  *    .inject(Object config)
  */
 
-(function(root) {
-	"use strict";
+//jshint camelcase:false
+/*globals module*/
 
-	var undefined;
+(function(root, undefined) {
+	'use strict';
+
 	var has = Object.prototype.hasOwnProperty;
-	var empty = { value: undefined };
 
 	var _ = Object.keys ? {
 		each: function each_ECMA5(collection, callback) {
@@ -42,22 +43,24 @@
 		wrap: function wrap_ECMA5(funct, base) {
 			// HACK: Performance of the second function is NEFAST!
 			return function() {
-				var a = this.base; this.base = base.value;
+				var a = this.base;
+				this.base = base.value;
 				// If you are here and don't know what to do, debug into the next line
 				var result = funct.apply(this, arguments);
-				return (this.base = a), result;
-			};
-
-			base.configurable = true;
-
-			return function() {
-				var original = Object.getOwnPropertyDescriptor(this, 'base');
-				Object.defineProperty(this, 'base', base);
-				// If you are here and don't know what to do, debug into the next line
-				var result = funct.apply(this, arguments);
-				Object.defineProperty(this, 'base', original || empty);
+				this.base = a;
 				return result;
 			};
+
+			// base.configurable = true;
+
+			// return function() {
+			// 	var original = Object.getOwnPropertyDescriptor(this, 'base');
+			// 	Object.defineProperty(this, 'base', base);
+			// 	// If you are here and don't know what to do, debug into the next line
+			// 	var result = funct.apply(this, arguments);
+			// 	Object.defineProperty(this, 'base', original || empty);
+			// 	return result;
+			// };
 		}
 	} : {
 		each: function each_FALLBACK(collection, callback) {
@@ -77,10 +80,12 @@
 		},
 		wrap: function wrap_FALLBACK(funct, base) {
 			return function() {
-				var a = this.base; this.base = base.value;
+				var a = this.base;
+				this.base = base.value;
 				// If you are here and don't know what to do, debug into the next line
 				var result = funct.apply(this, arguments);
-				return (this.base = a), result;
+				this.base = a;
+				return result;
 			};
 		}
 	};
@@ -109,7 +114,7 @@
 	function copy(target, source) {
 		_.each(source, function(prop) {
 			_.set(target, prop, _.getOwn(source, prop));
-		})
+		});
 	}
 
 	/// Dummy, just for prototype
@@ -133,7 +138,7 @@
 
 		// Add basic static methods
 		ctor.extend = function(desc, statics) {
-			return extend(this, desc, statics)
+			return extend(this, desc, statics);
 		};
 		ctor.inject = function(desc, statics) {
 			inject(this.prototype, desc);
@@ -143,10 +148,10 @@
 
 		// Copy parent's statics
 		copy(ctor, Parent);
-		inject(ctor, statics)
+		inject(ctor, statics);
 
 		// Extend parent prototype
-		intermediate.prototype = Parent.prototype
+		intermediate.prototype = Parent.prototype;
 		ctor.prototype = new intermediate;
 
 		// Apply new methods

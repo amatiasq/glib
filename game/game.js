@@ -1,6 +1,7 @@
 define(function(require) {
 
 	var Base = require('core/base');
+	var Vector = require('core/vector');
 	var Input = require('tools/input');
 	var Sprite = require('asset/sprite');
 	var mainLoader = require('tools/loader').instance;
@@ -13,15 +14,21 @@ define(function(require) {
 
 	//requestAnimFrame = function(callback) { window.setTimeout(callback, 1000 / 3) };
 
+	var defCollisions = {
+		trace: function(_x, _y, _width, _height, x, y) {
+			return { pos: Vector(x, y) };
+		}
+	};
+
 	var Game = Base.extend({
 
 		init: function(canvas) {
 			this.iteration = 0;
 			this.running = false;
 			this.input = new Input();
-			window.input = this.input;
 			this.entities = [];
 			this.maps = [];
+			this.collisions = defCollisions;
 			this.canvas = canvas;
 			this._needSort = false;
 			this._run = this._run.bind(this);
@@ -73,10 +80,11 @@ define(function(require) {
 				map.draw(ctx)
 			});
 
+
 			this.entities.forEach(function(entity) {
-				entity.step();
+				entity.step(this.collisions);
 				entity.draw(ctx);
-			});
+			}, this);
 		},
 
 		_run: function() {

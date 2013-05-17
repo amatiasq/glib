@@ -29,16 +29,25 @@ define(function(require) {
 		return angle % 360;
 	}
 
-	var Vector = Base.extend({
-		__type__: 'vector',
+	var pool = [];
+
+	var VectorProto = Base.extend({
+
+		$type: 'vector',
+
+		dispose: function() {
+			pool.push(this);
+			this.set(NaN, NaN);
+		},
 
 		//
 		// Base methods
 		//
 
 		init: function(x, y) {
-			this.x = x || 0;
-			this.y = y || 0;
+			this.x = x;
+			this.y = y;
+			return this;
 		},
 
 		set: function(x, y) {
@@ -194,6 +203,21 @@ define(function(require) {
 			return "V{x:" + this.x + ",y:" + this.y + "}";
 		}
 	});
+
+	function Vector(x, y) {
+		x = x || 0;
+		y = y || 0;
+
+		if (this instanceof Vector)
+			return this.init(x, y);
+
+		if (pool.length)
+			return pool.pop().set(x, y);
+
+		return new Vector(x, y);
+	}
+	Vector.prototype = VectorProto.prototype;
+
 
 	Vector.angleToRadians = angleToRadians;
 	Vector.radiansToAngle = radiansToAngle;

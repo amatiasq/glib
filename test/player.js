@@ -13,7 +13,7 @@ define(function(require) {
 			input.bind(input.KEY.RIGHT, 'right');
 		},
 
-		step: function() {
+		step: function(collisions) {
 			var keyVelocity = 2;
 			var direction;
 
@@ -37,7 +37,7 @@ define(function(require) {
 				this.animation = 'stop-' + this.direction;
 
 			this.direction = direction;
-			this.base();
+			this.base(collisions);
 		}
 	});
 });

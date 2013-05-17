@@ -8,6 +8,13 @@ define(function(require) {
 	var count = 0;
 	return Base.extend({
 
+		get width() {
+			return this.tile.width;
+		},
+		get height() {
+			return this.tile.height;
+		},
+
 		get tile() {
 			return this._tile;
 		},
@@ -66,9 +73,13 @@ define(function(require) {
 			this.pos.y = calc.y;
 		},
 
-		step: function() {
-			this.updateLocation(this._nextPos());
+		step: function(collisions) {
+			var next = this._nextPos();
+			var calc = collisions.trace(this.pos.x, this.pos.y, this.width, this.height, next.x, next.y);
+			this.updateLocation(calc);
 			this.animation.step();
+			calc.pos.dispose();
+			next.dispose();
 		},
 
 		draw: function(context) {

@@ -61,7 +61,7 @@ define(function(require) {
 		},
 
 		clone: function() {
-			return new Vector(this.x, this.y);
+			return Vector(this.x, this.y);
 		},
 
 		get isZero() {
@@ -111,7 +111,7 @@ define(function(require) {
 		},
 
 		diff: function(vector) {
-			return new Vector(this.x - vector.x, this.y - vector.y);
+			return Vector(this.x - vector.x, this.y - vector.y);
 		},
 
 		negate: function() {
@@ -221,7 +221,7 @@ define(function(require) {
 
 	Vector.angleToRadians = angleToRadians;
 	Vector.radiansToAngle = radiansToAngle;
-	Vector.zero = new Vector(0, 0);
+	Vector.zero = Vector(0, 0);
 
 	return Vector;
 

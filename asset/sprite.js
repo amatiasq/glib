@@ -5,16 +5,20 @@ define(function(require) {
 
 	// var Sprite = CocaCola.extend({ transparent: true });
 
-	var helperVector = new Vector();
-
 	var Sprite = Image.extend({
 
 		init: function(source, tileWidth, tileHeight, gapX, gapY) {
 			this.base(source);
 			this._tileCache = {};
-			this.tilesize = new Vector(tileWidth, tileHeight);
-			this.gap = new Vector(gapX || 0, gapY || gapX || 0);
+			this.tilesize = Vector(tileWidth, tileHeight);
+			this.gap = Vector(gapX || 0, gapY || gapX || 0);
 			this.square = this.tilesize.clone().merge(this.gap);
+		},
+
+		dispose: function() {
+			this.tilesize.dispose();
+			this.gap.dispose();
+			this.square.dispose();
 		},
 
 		crop: function(x, y, width, height) {
@@ -25,7 +29,10 @@ define(function(require) {
 
 		_createTile: function(tile) {
 			var coords = this._tileCoords(Math.abs(tile));
-			return new Image(this.path).crop(this._x + coords.x, this._y + coords.y, this.tilesize.x, this.tilesize.y);
+			var img = new Image(this.path)
+				.crop(this._x + coords.x, this._y + coords.y, this.tilesize.x, this.tilesize.y);
+			coords.dispose();
+			return img;
 		},
 
 		_tileCoords: function(tile) {
@@ -38,7 +45,7 @@ define(function(require) {
 			tile--;
 			var row = Math.floor(tile / this.tilesPerRow);
 			var col = tile % this.tilesPerRow;
-			return helperVector.set(col * this.square.x, row * this.square.y);
+			return Vector(col * this.square.x, row * this.square.y);
 		},
 
 		draw: function(context, tile) {

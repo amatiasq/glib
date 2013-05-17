@@ -13,7 +13,8 @@ define(function(require) {
 			this.init.apply(this, arguments);
 		},
 
-		init: function() { }
+		init: function() { },
+		dispose: function() { },
 	});
 
 });

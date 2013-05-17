@@ -20,8 +20,12 @@ define(function(require) {
 
 		init: function(tilesize, data, tileset) {
 			this.base(tilesize, data);
-			this.scroll = new Vector(0, 0);
+			this.scroll = Vector(0, 0);
 			this.tiles = tileset;
+		},
+
+		dispose: function() {
+			this.scroll.dispose();
 		},
 
 		setScroll: function(x, y) {

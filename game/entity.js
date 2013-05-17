@@ -44,11 +44,19 @@ define(function(require) {
 			this.animations = {};
 			//this.bounciness = 0;
 
-			this.maxVel = new Vector(100, 100);
-			this.friction = new Vector(0, 0);
-			this.accel = new Vector(0, 0);
-			this.vel = new Vector(0, 0);
-			this.pos = new Vector(0, 0);
+			this.maxVel = Vector(100, 100);
+			this.friction = Vector(0, 0);
+			this.accel = Vector(0, 0);
+			this.vel = Vector(0, 0);
+			this.pos = Vector(0, 0);
+		},
+
+		dispose: function() {
+			this.maxVel.dispose();
+			this.friction.dispose();
+			this.accel.dispose();
+			this.vel.dispose();
+			this.pos.dispose();
 		},
 
 		addAnimation: function(id, interval, animation) {

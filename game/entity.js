@@ -77,8 +77,8 @@ define(function(require) {
 		},
 
 		updateLocation: function(calc) {
-			this.pos.x = calc.x;
-			this.pos.y = calc.y;
+			this.pos.x = calc.pos.x;
+			this.pos.y = calc.pos.y;
 		},
 
 		step: function(collisions) {

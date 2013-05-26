@@ -37,6 +37,11 @@ define(function(require) {
 			else if (this.direction)
 				this.animation = 'stop-' + this.direction;
 
+			if (this.color) {
+				context.fillStyle = this.color;
+				context.fillRect(this.pos.x, this.pos.y, this.animation.width, this.animation.height);
+			}
+
 			this.direction = direction;
 			this.base(collisions);
 		}

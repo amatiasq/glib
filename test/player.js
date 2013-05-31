@@ -1,3 +1,5 @@
+/*globals context*/
+
 define(function(require) {
 	'use strict';
 

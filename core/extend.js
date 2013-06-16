@@ -20,6 +20,7 @@
 (function(root, undefined) {
 	'use strict';
 
+	function empty() { }
 	var has = Object.prototype.hasOwnProperty;
 
 	var _ = Object.keys ? {
@@ -41,26 +42,29 @@
 			Object.defineProperty(target, prop, descriptor);
 		},
 		wrap: function wrap_ECMA5(funct, base) {
+
 			// HACK: Performance of the second function is NEFAST!
+			if (extend.performanceHack) {
+				return function() {
+					var a = this.base;
+					this.base = base.value;
+					// If you are here and don't know what to do, debug into the next line
+					var result = funct.apply(this, arguments);
+					this.base = a;
+					return result;
+				};
+			}
+
+			base.configurable = true;
+
 			return function() {
-				var a = this.base;
-				this.base = base.value;
+				var original = Object.getOwnPropertyDescriptor(this, 'base');
+				Object.defineProperty(this, 'base', base);
 				// If you are here and don't know what to do, debug into the next line
 				var result = funct.apply(this, arguments);
-				this.base = a;
+				Object.defineProperty(this, 'base', original || empty);
 				return result;
 			};
-
-			// base.configurable = true;
-
-			// return function() {
-			// 	var original = Object.getOwnPropertyDescriptor(this, 'base');
-			// 	Object.defineProperty(this, 'base', base);
-			// 	// If you are here and don't know what to do, debug into the next line
-			// 	var result = funct.apply(this, arguments);
-			// 	Object.defineProperty(this, 'base', original || empty);
-			// 	return result;
-			// };
 		}
 	} : {
 		each: function each_FALLBACK(collection, callback) {
@@ -161,6 +165,8 @@
 
 		return ctor;
 	}
+
+	extend.performanceHack = false;
 
 	if (typeof module !== 'undefined' && module.exports)
 		module.exports = extend;

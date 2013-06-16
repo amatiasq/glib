@@ -9,10 +9,10 @@ define(function(require) {
 	return Base.extend({
 
 		get width() {
-			return this.tile.width;
+			return this.tile.tilesize ? this.tile.tilesize.x : this.tile.width;
 		},
 		get height() {
-			return this.tile.height;
+			return this.tile.tilesize ? this.tile.tilesize.y : this.tile.height;
 		},
 
 		get tile() {
@@ -77,8 +77,8 @@ define(function(require) {
 		},
 
 		updateLocation: function(calc) {
-			this.pos.x = calc.x;
-			this.pos.y = calc.y;
+			this.pos.x = calc.pos.x;
+			this.pos.y = calc.pos.y;
 		},
 
 		step: function(collisions) {

@@ -63,11 +63,16 @@ define(function(require) {
 			this.animations[id] = new Animation(this.tile, interval, animation);
 		},
 
-		_nextPos: function() {
-			if (!this.accel.isZero)
-				this.vel.merge(this.accel);
-			else
-				this.vel.toZero(this.friction);
+		_nextPos: function(clock) {
+			if (!this.accel.isZero) {
+				var accel = this.accel.clone().multiply(clock.tick);
+				this.vel.merge(accel);
+				accel.dispose();
+			} else {
+				var friction = this.friction.clone().multiply(clock.tick);
+				this.vel.toZero(friction);
+				friction.dispose();
+			}
 
 			this.maxVel.negate();
 			this.vel.min(this.maxVel);
@@ -81,8 +86,8 @@ define(function(require) {
 			this.pos.y = calc.pos.y;
 		},
 
-		step: function(collisions) {
-			var next = this._nextPos();
+		step: function(clock, collisions) {
+			var next = this._nextPos(clock);
 			var calc = collisions.trace(this.pos.x, this.pos.y, this.width, this.height, next.x, next.y);
 			this.updateLocation(calc);
 			this.animation.step();

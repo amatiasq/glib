@@ -16,8 +16,8 @@ define(function(require) {
 			input.bind(input.KEY.RIGHT, 'right');
 		},
 
-		step: function(collisions) {
-			var keyVelocity = 2;
+		step: function(clock, collisions) {
+			var keyVelocity = 100 * clock.tick;
 			var direction;
 
 			if (this.input.get('up')) {
@@ -47,7 +47,7 @@ define(function(require) {
 			}
 
 			this.direction = direction;
-			this.base(collisions);
+			this.base(clock, collisions);
 		}
 	});
 });

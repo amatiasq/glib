@@ -1,3 +1,5 @@
+/*globals context*/
+
 define(function(require) {
 	'use strict';
 
@@ -18,24 +20,31 @@ define(function(require) {
 			var keyVelocity = 2;
 			var direction;
 
-			this.vel.set(
-				this.input.get('left') ? -keyVelocity : this.input.get('right') ? keyVelocity : 0,
-				this.input.get('up') ? -keyVelocity : this.input.get('down') ? keyVelocity : 0
-			);
-
-			if (this.input.get('up'))
+			if (this.input.get('up')) {
 				direction = 'up';
-			else if (this.input.get('down'))
+				this.vel.set(0, -keyVelocity);
+			} else if (this.input.get('down')) {
 				direction = 'down';
-			else if (this.input.get('left'))
+				this.vel.set(0, keyVelocity);
+			} else if (this.input.get('left')) {
 				direction = 'left';
-			else if (this.input.get('right'))
+				this.vel.set(-keyVelocity, 0);
+			} else if (this.input.get('right')) {
 				direction = 'right';
+				this.vel.set(keyVelocity, 0);
+			} else {
+				this.vel.set(0, 0);
+			}
 
 			if (direction)
 				this.animation = 'walk-' + direction;
 			else if (this.direction)
 				this.animation = 'stop-' + this.direction;
+
+			if (this.color) {
+				context.fillStyle = this.color;
+				context.fillRect(this.pos.x, this.pos.y, this.animation.width, this.animation.height);
+			}
 
 			this.direction = direction;
 			this.base(collisions);

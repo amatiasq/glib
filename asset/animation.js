@@ -12,6 +12,13 @@ define(function(require) {
 			this._interval = value * 1000;
 		},
 
+		get width() {
+			return this.sprite.tilesize.x;
+		},
+		get height() {
+			return this.sprite.tilesize.y;
+		},
+
 		init: function(sprite, interval, sequence) {
 			this.sprite = sprite;
 			this.sequence = sequence;

@@ -4,6 +4,7 @@ define(function(require) {
 	var Base = require('core/base');
 
 	return Base.extend({
+
 		init: function(tilesize, data) {
 			this.tilesize = tilesize;
 			this.data = data;

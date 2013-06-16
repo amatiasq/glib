@@ -70,7 +70,7 @@ define(function(require) {
 				context.drawImage(this.data, 0, 0, this.width, this.height);
 			else
 				context.drawImage(this.data, this._x, this._y, this._width, this._height,
-					0, 0, this.width, this.height);
+					0, 0, this._width, this._height);
 
 			context.restore();
 		}

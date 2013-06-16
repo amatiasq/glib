@@ -46,7 +46,6 @@ define(function(require) {
 	var player = game.spawn(Player, 100, 16);
 
 	player.friction.set(0.1, 0.1);
-	player.accel.y = 0.05;
 	player.tile = new Sprite('hero.png', 16, 20, 0, 12).crop(8, 36, 48, 84);
 	player.addAnimation('stop-down', 1, [ 2 ]);
 	player.addAnimation('stop-up', 1,   [ 5 ]);
@@ -57,7 +56,7 @@ define(function(require) {
 	player.addAnimation('walk-left', 0.1, [ 7, 8, 9 ]);
 	player.addAnimation('walk-right', 0.1, [ -7, -8, -9 ]);
 
-	player.color = 'red';
+	//player.color = 'red';
 	game.collisions = new Collisions(16, data);
 
 	window.context = game.canvas.getContext('2d');
@@ -67,7 +66,6 @@ define(function(require) {
 	game.addMap(map);
 	game.start();
 
-	setTimeout(function() { player.accel.y = 0 }, 1000);
 	setInterval(function() { fps.innerHTML = Math.round(game.fps) + 'fps' }, 300);
 
 });

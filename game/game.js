@@ -2,6 +2,7 @@ define(function(require) {
 	'use strict';
 
 	var Base = require('core/base');
+	var Clock = require('core/clock');
 	var Vector = require('core/vector');
 	var Input = require('tools/input');
 	var mainLoader = require('tools/loader').instance;
@@ -26,6 +27,7 @@ define(function(require) {
 			this.iteration = 0;
 			this.running = false;
 			this.input = new Input();
+			this.clock = new Clock();
 			this.entities = [];
 			this.maps = [];
 			this.collisions = defCollisions;
@@ -64,6 +66,8 @@ define(function(require) {
 			var ctx = this.canvas.getContext('2d');
 			this.iteration++;
 
+			this.clock.add(this.clock.real());
+
 			if (this.iteration === 1)
 				console.profile();
 			if (this.iteration === 600)
@@ -80,9 +84,8 @@ define(function(require) {
 				map.draw(ctx);
 			});
 
-
 			this.entities.forEach(function(entity) {
-				entity.step(this.collisions);
+				entity.step(this.clock, this.collisions);
 				entity.draw(ctx);
 			}, this);
 		},

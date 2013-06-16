@@ -8,22 +8,6 @@ define(function(require) {
 	function getY(item) { return item.y }
 	function dispose(item) { item.dispose() }
 
-	function createDesplacement(origin) {
-		return function(x, y) {
-			return Vector(
-				x - origin.x * (y / origin.y),
-				y - origin.y * (x / origin.x)
-			);
-		};
-	}
-	function hasSameSign(num1, num2) {
-		return num1 * num2 > 0;
-	}
-
-	function closest(source, num1, num2) {
-		return Math.abs(source - num1) < Math.abs(source - num2);
-	}
-
 
 	return Map.extend({
 		fits: function(fromX, fromY) { //, toX, toY, width, height) {
@@ -79,6 +63,30 @@ define(function(require) {
 				return result;
 			}
 
+			// TODO: Diagonal movement collision
+			return result;
+
+			/*
+
+	function createDesplacement(origin) {
+		return function(x, y) {
+			return Vector(
+				x - origin.x * (y / origin.y),
+				y - origin.y * (x / origin.x)
+			);
+		};
+	}
+	function hasSameSign(num1, num2) {
+		return num1 * num2 > 0;
+	}
+
+	function closest(source, num1, num2) {
+		var diff1 = Math.abs(source - num1);
+		var diff2 = Math.abs(source - num2);
+		return diff1 < diff2 || diff1 === diff2;
+	}
+
+
 			// Otherwise we have to perform heavy diagonal collision detection
 			// to know if the tiles in the area are actually on the way
 
@@ -101,6 +109,8 @@ define(function(require) {
 			var startCenter = Vector(fromX + halfSize.x, fromY + halfSize.y);
 			var startEnd = Vector(fromX + width, fromY + height);
 
+			console.log('NEW ONE')
+
 			var collides = tiles.map(function(tile) {
 				var pos = tile.multiply(tilesize);
 				var end = pos.clone().add(tilesize);
@@ -119,17 +129,28 @@ define(function(require) {
 					return false;
 
 				var center = pos.clone().add(tilesize / 2);
-				var relativePos = startCenter.diff(center).abs();
-				var from, to;
+				var from = Vector(
+					closest(center.x, fromX, startEnd.x) ? fromX : startEnd.x,
+					closest(center.y, fromY, startEnd.y) ? fromY : startEnd.y
+				);
+				var to = Vector(
+					closest(startCenter.x, end.x, pos.x) ? end.x : pos.x,
+					closest(startCenter.y, end.y, pos.y) ? end.y : pos.y
+				);
+				var size = to.diff(from);
 
-				if (relativePos.x < relativePos.y) {
-					from = closest(center.y, fromY, startEnd.y) ? fromY : startEnd.y;
-					to = closest(startCenter.y, pos.y, end.y) ? pos.y : end.y;
-					return Vector(Infinity, to - from);
+				console.log(fromX, fromY, destX, destY);
+				console.log(from.toString(), to.toString());
+				console.log(size.round(2).toString());
+				console.log(size.abs().toString());
+
+				if (size.x < size.y) {
+					return Vector(size.x, Infinity);
+				} else if (size.x > size.y) {
+					return Vector(Infinity, size.y);
 				} else {
-					from = closest(center.x, fromX, startEnd.x) ? fromX : startEnd.x;
-					to = closest(startCenter.x, pos.x, end.x) ? pos.x : end.x;
-					return Vector(to - from, Infinity);
+					console.log('PERFECT!');
+					return Vector(0, 0);
 				}
 			}).filter(Boolean);
 
@@ -152,6 +173,7 @@ define(function(require) {
 			}
 
 			return result;
+			*/
 		}
 	});
 });

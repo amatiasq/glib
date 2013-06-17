@@ -2,6 +2,7 @@ define(function(require) {
 	'use strict';
 
 	var Base = require('core/base');
+	var Emitter = require('core/emitter');
 	var Clock = require('core/clock');
 	var Vector = require('core/vector');
 	var Input = require('tools/input');
@@ -26,6 +27,7 @@ define(function(require) {
 		init: function(canvas) {
 			this.iteration = 0;
 			this.running = false;
+			this.emitter = new Emitter();
 			this.input = new Input();
 			this.clock = new Clock();
 			this.entities = [];
@@ -36,11 +38,25 @@ define(function(require) {
 			this._run = this._run.bind(this);
 		},
 
-		spawn: function(Constructor, x, y) {
+		on: function(signal, listener, scope) {
+			return this.emitter.on(signal, listener, scope);
+		},
+
+		off: function(signal, listener, scope) {
+			return this.emitter.off(signal, listener, scope);
+		},
+
+		once: function(signal, listener, scope) {
+			return this.emitter.once(signal, listener, scope);
+		},
+
+		spawn: function(Constructor, x, y, width, height) {
 			this._needSort = true;
 			var entity = new Constructor(this.input);
 			entity.pos.x = x;
 			entity.pos.y = y;
+			entity.width = width;
+			entity.height = height;
 			this.entities.push(entity);
 			return entity;
 		},
@@ -68,6 +84,8 @@ define(function(require) {
 
 			this.clock.add(this.clock.real());
 
+			this.emitter.emit('tick', this);
+
 			if (this.iteration === 1)
 				console.profile();
 			if (this.iteration === 600)
@@ -79,6 +97,7 @@ define(function(require) {
 			}
 
 			ctx.scale(2, 2);
+			ctx.translate(this.canvas.width / -4, this.canvas.height / -4);
 
 			this.maps.forEach(function(map) {
 				map.draw(ctx);

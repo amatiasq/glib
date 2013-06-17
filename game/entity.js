@@ -9,10 +9,16 @@ define(function(require) {
 	return Base.extend({
 
 		get width() {
-			return this.tile.tilesize ? this.tile.tilesize.x : this.tile.width;
+			return this._width || (this.tile.tilesize ? this.tile.tilesize.x : this.tile.width);
+		},
+		set width(value) {
+			this._width = value;
 		},
 		get height() {
-			return this.tile.tilesize ? this.tile.tilesize.y : this.tile.height;
+			return this._height || (this.tile.tilesize ? this.tile.tilesize.y : this.tile.height);
+		},
+		set height(value) {
+			this._height = value;
 		},
 
 		get tile() {
@@ -42,6 +48,7 @@ define(function(require) {
 
 			this.input = input;
 			this.animations = {};
+			this.offset = Vector(0, 0);
 			//this.bounciness = 0;
 
 			this.maxVel = Vector(100, 100);
@@ -97,7 +104,7 @@ define(function(require) {
 
 		draw: function(context) {
 			context.save();
-			context.translate(this.pos.x, this.pos.y);
+			context.translate(this.pos.x - this.offset.x, this.pos.y - this.offset.y);
 			this.animation.draw(context);
 			context.restore();
 		},

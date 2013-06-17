@@ -38,12 +38,21 @@ define(function(require) {
 			var colStart = Math.floor(this.scroll.x / tilesize);
 			var colEnd = Math.ceil((this.scroll.x + context.canvas.width) / tilesize);
 
-			if (rowStart < 0) rowStart = 0;
 			if (rowEnd > this.height) rowEnd = this.height;
-			if (colStart < 0) colStart = 0;
 			if (colEnd > this.width) colEnd = this.width;
 
 			context.save();
+
+			context.translate(-this.scroll.x % tilesize, -this.scroll.y % tilesize);
+
+			if (rowStart < 0) {
+				context.translate(0, (-rowStart - 1) * tilesize);
+				rowStart = 0;
+			}
+			if (colStart < 0) {
+				context.translate((-colStart - 1) * tilesize, 0);
+				colStart = 0;
+			}
 
 			var i, j;
 			var rowWidth = (colEnd - colStart) * tilesize;

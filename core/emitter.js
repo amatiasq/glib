@@ -9,8 +9,11 @@
  * Provides a constructor to listen and emit signals.
  */
 
+/*jshint -W021 */
+/*globals Base, module */
+
 (function(root) {
-	"use strict";
+	'use strict';
 
 	function equals(handler, scope, expected) {
 		return function(item) {
@@ -25,7 +28,7 @@
 		if (!listeners[signal])
 			return false;
 
-		return listeners[signal].some(equals(handler, scope, true))
+		return listeners[signal].some(equals(handler, scope, true));
 	}
 
 	/**

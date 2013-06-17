@@ -28,29 +28,31 @@ define(function(require) {
 			if ((this.direction === 'left' || this.direction === 'right') && this.pos.x === calc.pos.x)
 				this.moving = false;
 
+			var target;
+
 			if (this.direction === 'up') {
-				var target = Math.floor(this.pos.y / this.height) * this.height;
+				target = Math.floor(this.pos.y / this.height) * this.height;
 				if (this.pos.y > target && calc.pos.y <= target) {
 					calc.pos.y = target;
 					this.moving = false;
 				}
 			}
 			if (this.direction === 'down') {
-				var target = Math.ceil(this.pos.y / this.height) * this.height;
+				target = Math.ceil(this.pos.y / this.height) * this.height;
 				if (this.pos.y < target && calc.pos.y >= target) {
 					calc.pos.y = target;
 					this.moving = false;
 				}
 			}
 			if (this.direction === 'left') {
-				var target = Math.floor(this.pos.x / this.width) * this.width;
+				target = Math.floor(this.pos.x / this.width) * this.width;
 				if (this.pos.x > target && calc.pos.x <= target) {
 					calc.pos.x = target;
 					this.moving = false;
 				}
 			}
 			if (this.direction === 'right') {
-				var target = Math.ceil(this.pos.x / this.width) * this.width;
+				target = Math.ceil(this.pos.x / this.width) * this.width;
 				if (this.pos.x < target && calc.pos.x >= target) {
 					calc.pos.x = target;
 					this.moving = false;

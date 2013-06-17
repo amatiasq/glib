@@ -1,11 +1,12 @@
 define(function(require) {
+	'use strict';
 
 	var Base = require('core/base');
 
 	var Clock = Base.extend({
 
 		get tick() {
-			return this._tick
+			return this._tick;
 		},
 
 		init: function() {
